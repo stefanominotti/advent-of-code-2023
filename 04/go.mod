@@ -1,4 +1,4 @@
-module advent-of-code/02
+module advent-of-code/04
 
 go 1.23.2
 
