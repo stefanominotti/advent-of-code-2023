@@ -6,8 +6,6 @@ import (
 	"strings"
 )
 
-const gameRegexPattern = `Game (\d+):.*`
-
 type BallExtraction struct {
     color string
 	number int
@@ -18,14 +16,21 @@ type Game struct {
 	balls []BallExtraction
 }
 
+const gameRegexPattern = `Game (\d+):.*`
+
+// Build a Game object continaing the number of the game and 
+// the list of all extracted balls (BallExtraction) in the game.
 func createGame(line string) (Game, error) {
+	// Retrieve game number
 	re := regexp.MustCompile(gameRegexPattern)
 	gameNumberString := re.FindStringSubmatch(line)[1]
 
+	// Retrieve the list of the extractions
 	extractions := trimSpacesAndSplit(strings.Split(line, ":")[1], ";")
 
+	// For each extracted ball in each extraction build the
+	// BallExtraction object with color and number
 	var balls []BallExtraction
-
 	for _, extraction := range extractions {
 		extractedBalls := trimSpacesAndSplit(extraction, ",")
 

@@ -5,24 +5,30 @@ import (
 	"strconv"
 )
 
-const partBRegexPattern = `one|two|three|four|five|six|seven|eight|nine|\d`
-const invertedPartBRegexPattern = `eno|owt|eerht|ruof|evif|xis|neves|thgie|enin|\d`
+const extendedDigitPattern = `one|two|three|four|five|six|seven|eight|nine|\d`
+const invertedExtendedDigitPattern = `eno|owt|eerht|ruof|evif|xis|neves|thgie|enin|\d`
 
 func processPartBLine(line string) (int, error) {
-	re := regexp.MustCompile(partBRegexPattern)
+	// Find the first digit in the line also in text format
+	re := regexp.MustCompile(extendedDigitPattern)
 	match := re.FindString(line)
 	firstNumber, err := stringNumberToInt(match)
 	if err != nil {
 		return 0, err
 	}
 
-	invertedRe := regexp.MustCompile(invertedPartBRegexPattern)
+	// Find the last digit in the line also in text format
+	// by matching text numbers reversed to avoid cases like
+	// 'twone' in which the non-reversed regex would match 'two'
+	// instead of 'one' as number
+	invertedRe := regexp.MustCompile(invertedExtendedDigitPattern)
 	match = invertedRe.FindString(reverse(line))
 	lastNumber, err := stringNumberToInt(reverse(match))
 	if err != nil {
 		return 0, err
 	}
 
+	// Concat the digits
 	return firstNumber*10 + lastNumber, nil
 }
 
