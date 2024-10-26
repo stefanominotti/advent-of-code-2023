@@ -6,21 +6,17 @@ import (
 	"os"
 )
 
-func RunChallenge(processingFunctionPartA func(fileScanner *bufio.Scanner) (int, error), processingFunctionPartB func(fileScanner *bufio.Scanner) (int, error)) {
-	for _, part := range []string{"A", "B"} {
+func RunChallenge(processingFunctions ...func(fileScanner *bufio.Scanner) (int, error)) {
+	for idx, function := range processingFunctions {
 		var result int
 		var err error
-		if (part == "A") {
-			result, err = processFile(processingFunctionPartA)
-		} else {
-			result, err = processFile(processingFunctionPartB)
-		}
+		result, err = processFile(function)
 
 		if err != nil {
 			fmt.Println(err)
 			return
 		}
-		fmt.Printf("Part %s: %d\n", part, result)
+		fmt.Printf("Part %s: %d\n", string('A'+idx), result)
 	}
 }
 
@@ -52,7 +48,7 @@ func processFile(processingFunction func(fileScanner *bufio.Scanner) (int, error
 }
 
 func processFileLineByLine(processingFunction func(line string) (int, error)) (int, error) {
-	lineByLineProcessing := func (fileScanner *bufio.Scanner) (int, error) {
+	lineByLineProcessing := func(fileScanner *bufio.Scanner) (int, error) {
 		result := 0
 		for fileScanner.Scan() {
 			line := fileScanner.Text()
