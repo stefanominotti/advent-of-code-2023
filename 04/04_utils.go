@@ -46,13 +46,13 @@ func createScratchcard(line string) (Scratchcard, error) {
 	numbersStrings := utils.TrimSpacesAndSplit(strings.Split(line, ":")[1], "|")
 
 	// Convert the numbers string into numbers array
-	numbers, err := numbersStringToArray(numbersStrings[0])
+	numbers, err := utils.ParseStringIntoIntArray(numbersStrings[0], " ")
 	if err != nil {
 		return Scratchcard{}, err
 	}
 
 	// Convert the winning numbers string into numbers array
-	winningNumbers, err := numbersStringToArray(numbersStrings[1])
+	winningNumbers, err := utils.ParseStringIntoIntArray(numbersStrings[1], " ")
 	if err != nil {
 		return Scratchcard{}, err
 	}
@@ -62,21 +62,4 @@ func createScratchcard(line string) (Scratchcard, error) {
 		return Scratchcard{}, err
 	}
 	return Scratchcard{cardNumber, numbers, winningNumbers}, nil
-}
-
-// Split the string of numbers by ' ' and parse them into int type
-func numbersStringToArray(numbersString string) ([]int, error) {
-	numberStrings := utils.TrimSpacesAndSplit(numbersString, " ")
-	var numbers []int
-	for _, numberString := range numberStrings {
-		if (numberString == "") {
-			continue
-		}
-		number, err := strconv.Atoi(numberString)
-		if err != nil {
-			return []int{}, err
-		}
-		numbers = append(numbers, number)
-	}
-	return numbers, nil
 }

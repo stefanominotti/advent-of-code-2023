@@ -4,7 +4,6 @@ import (
 	"advent-of-code/utils"
 	"bufio"
 	"slices"
-	"strconv"
 	"strings"
 )
 
@@ -37,17 +36,20 @@ func parseFile(fileScanner *bufio.Scanner) ([]int, map[string][][]int, error) {
 	var seeds []int
 	var currentTransition string
 	for fileScanner.Scan() {
+		// Skip empty lined
 		line := fileScanner.Text()	
 		if line == "" {
 			continue
 		}
 
+		// Update current transition if transition start line is matched
 		line = strings.ReplaceAll(line, " map:", "")
 		if slices.Contains(steps, line) {
 			currentTransition = line
 			continue
 		}
 
+		// Parse seed line (first file line)
 		if len(seeds) == 0 {
 			parsedSeeds, err := parseSeedsLine(line)
 			if err != nil {
@@ -57,7 +59,8 @@ func parseFile(fileScanner *bufio.Scanner) ([]int, map[string][][]int, error) {
 			continue
 		}
 
-		stepValues, err := parseStepLine(line)
+		// Parse step line
+		stepValues, err := utils.ParseStringIntoIntArray(line, " ")
 		if err != nil {
 			return nil, nil, err
 		}
@@ -68,28 +71,6 @@ func parseFile(fileScanner *bufio.Scanner) ([]int, map[string][][]int, error) {
 }
 
 func parseSeedsLine(line string) ([]int, error) {
-	var seeds []int
 	seedsString := strings.Split(line, ":")[1]
-	seedsStringValues := utils.TrimSpacesAndSplit(seedsString, " ")
-	for _, seedString := range seedsStringValues {
-		seed, err := strconv.Atoi(seedString)
-		if err != nil {
-			return nil, err
-		}
-		seeds = append(seeds, seed)
-	}
-	return seeds, nil
-}
-
-func parseStepLine(line string) ([]int, error) {
-	stepStringValues := utils.TrimSpacesAndSplit(line, " ")
-	var stepValues []int
-	for _, valueString := range stepStringValues {
-		value, err := strconv.Atoi(valueString)
-		if err != nil {
-			return nil, err
-		}
-		stepValues = append(stepValues, value)
-	}
-	return stepValues, nil
+	return utils.ParseStringIntoIntArray(seedsString, " ")
 }
