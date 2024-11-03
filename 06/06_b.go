@@ -7,17 +7,13 @@ import (
 	"strings"
 )
 
-func processPartBFile(fileScanner *bufio.Scanner) (int, error) {
-	time, distance, err := parsePartBFile(fileScanner)
-	if err != nil {
-		return 0, err
-	}
-
+func processPartBFile(fileScanner *bufio.Scanner) int {
+	time, distance := parsePartBFile(fileScanner)
 	minTime, maxTime := calculateMinAndMaxButtonHoldingTime(distance, time)
-	return maxTime - minTime + 1, nil
+	return maxTime - minTime + 1
 }
 
-func parsePartBFile(fileScanner *bufio.Scanner) (int, int, error) {
+func parsePartBFile(fileScanner *bufio.Scanner) (int, int) {
 	time := -1
 	distance := -1
 	for fileScanner.Scan() {
@@ -32,7 +28,7 @@ func parsePartBFile(fileScanner *bufio.Scanner) (int, int, error) {
 		}
 		number, err := strconv.Atoi(concatenatedLine)
 		if err != nil {
-			return 0, 0, err
+			panic(err)
 		}
 
 		if time == -1 {
@@ -41,5 +37,5 @@ func parsePartBFile(fileScanner *bufio.Scanner) (int, int, error) {
 			distance = number
 		}
 	}
-	return time, distance, nil
+	return time, distance
 }

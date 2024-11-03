@@ -4,11 +4,8 @@ import (
 	"bufio"
 )
 
-func processPartBFile(fileScanner *bufio.Scanner) (int, error) {
-	seeds, steps, err := parseFile(fileScanner)
-	if err != nil {
-		return 0, err
-	}
+func processPartBFile(fileScanner *bufio.Scanner) int {
+	seeds, steps := parseFile(fileScanner)
 
 	// Starting from location 0, calculate the corresponding original
 	// seed of each location until a valid seed is found
@@ -24,7 +21,7 @@ func processPartBFile(fileScanner *bufio.Scanner) (int, error) {
 		}
 		currentLocation += 1
 	}
-	return result, nil
+	return result
 }
 
 // Calculate the seed from a location by following the steps in reverse order

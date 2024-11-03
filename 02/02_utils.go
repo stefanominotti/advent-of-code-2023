@@ -21,7 +21,7 @@ const gameRegexPattern = `Game (\d+):.*`
 
 // Build a Game object continaing the number of the game and 
 // the list of all extracted balls (BallExtraction) in the game.
-func createGame(line string) (Game, error) {
+func createGame(line string) Game {
 	// Retrieve game number
 	re := regexp.MustCompile(gameRegexPattern)
 	gameNumberString := re.FindStringSubmatch(line)[1]
@@ -41,7 +41,7 @@ func createGame(line string) (Game, error) {
 			color := splitBall[1]
 			number, err := strconv.Atoi(splitBall[0])
 			if err != nil {
-				return Game{}, err
+				panic(err)
 			}
 			
 			balls = append(balls, BallExtraction{color, number})
@@ -50,7 +50,7 @@ func createGame(line string) (Game, error) {
 
 	gameNumber, err := strconv.Atoi(gameNumberString)
 	if err != nil {
-		return Game{}, err
+		panic(err)
 	}
-	return Game{gameNumber, balls}, nil
+	return Game{gameNumber, balls}
 }

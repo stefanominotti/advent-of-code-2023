@@ -13,7 +13,7 @@ type Hand struct {
 	bet        int
 }
 
-func processFile(fileScanner *bufio.Scanner, parseLine func(line string) Hand) (int, error) {
+func processFile(fileScanner *bufio.Scanner, parseLine func(line string) Hand) int {
 	hands := parseFile(fileScanner, parseLine)
 
 	// Sort hands by strength
@@ -23,7 +23,7 @@ func processFile(fileScanner *bufio.Scanner, parseLine func(line string) Hand) (
 	for idx, hand := range hands {
 		result += (idx + 1) * hand.bet
 	}
-	return result, nil
+	return result
 }
 
 // Given two hands returns -1 if a is stronger than b,

@@ -4,12 +4,9 @@ import (
 	"math"
 )
 
-func processPartALine(line string) (int, error) {
-	winningNumbersCount, err := getLineWinningNumbersCount(line)
-	if err != nil {
-		return 0, err
-	}
+func processPartALine(line string) int {
+	winningNumbersCount := getLineWinningNumbersCount(line)
 
 	// Return 2^(number of winning numbers)
-	return int(math.Pow(2, float64(winningNumbersCount-1))), nil
+	return int(math.Pow(2, float64(winningNumbersCount-1)))
 }

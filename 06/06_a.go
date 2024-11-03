@@ -6,11 +6,8 @@ import (
 	"strings"
 )
 
-func processPartAFile(fileScanner *bufio.Scanner) (int, error) {
-	times, distances, err := parsePartAFile(fileScanner)
-	if err != nil {
-		return 0, err
-	}
+func processPartAFile(fileScanner *bufio.Scanner) int {
+	times, distances := parsePartAFile(fileScanner)
 
 	result := 1
 	for idx, time := range times {
@@ -18,10 +15,10 @@ func processPartAFile(fileScanner *bufio.Scanner) (int, error) {
 		minTime, maxTime := calculateMinAndMaxButtonHoldingTime(distance, time)
 		result *= maxTime - minTime + 1
 	}
-	return result, nil
+	return result
 }
 
-func parsePartAFile(fileScanner *bufio.Scanner) ([]int, []int, error) {
+func parsePartAFile(fileScanner *bufio.Scanner) ([]int, []int) {
 	var times []int
 	var distances []int
 	for fileScanner.Scan() {
@@ -31,7 +28,7 @@ func parsePartAFile(fileScanner *bufio.Scanner) ([]int, []int, error) {
 
 		parsedLine, err := utils.ParseStringIntoIntArray(line, " ")
 		if err != nil {
-			return nil, nil, err
+			panic(err)
 		}
 		if len(times) == 0 {
 			times = parsedLine
@@ -39,5 +36,5 @@ func parsePartAFile(fileScanner *bufio.Scanner) ([]int, []int, error) {
 			distances = parsedLine
 		}
 	}
-	return times, distances, nil
+	return times, distances
 }

@@ -11,8 +11,8 @@ func main() {
 	utils.RunChallenge(processingFunctionPartA, processingFunctionPartB)
 }
 
-func processFileFunction(lineProcessingFunction func(prevLine string, line string, nextLine string) (int, error)) func(fileScanner *bufio.Scanner) (int, error) {
-	return func(fileScanner *bufio.Scanner) (int, error) {
+func processFileFunction(lineProcessingFunction func(prevLine string, line string, nextLine string) int) func(fileScanner *bufio.Scanner) int {
+	return func(fileScanner *bufio.Scanner) int {
 		var prevLine string
 		var line string
 		var nextLine string
@@ -24,15 +24,11 @@ func processFileFunction(lineProcessingFunction func(prevLine string, line strin
 				continue
 			}
 			nextLine = fileScanner.Text()
-			lineResult, err := lineProcessingFunction(prevLine, line, nextLine)
-			if err != nil {
-				return 0, err
-			}
-			result += lineResult
+			result += lineProcessingFunction(prevLine, line, nextLine)
 			prevLine = line
 			line = nextLine
 		}
 
-		return result, nil
+		return result
 	}
 }

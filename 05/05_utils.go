@@ -25,7 +25,7 @@ func stepsReversed() []string {
 	return steps
 }
 
-func parseFile(fileScanner *bufio.Scanner) ([]int, map[string][][]int, error) {
+func parseFile(fileScanner *bufio.Scanner) ([]int, map[string][][]int) {
 	steps := steps()
 
 	stepsMap := map[string][][]int{}
@@ -51,10 +51,7 @@ func parseFile(fileScanner *bufio.Scanner) ([]int, map[string][][]int, error) {
 
 		// Parse seed line (first file line)
 		if len(seeds) == 0 {
-			parsedSeeds, err := parseSeedsLine(line)
-			if err != nil {
-				return nil, nil, err
-			}
+			parsedSeeds := parseSeedsLine(line)
 			seeds = parsedSeeds
 			continue
 		}
@@ -62,15 +59,19 @@ func parseFile(fileScanner *bufio.Scanner) ([]int, map[string][][]int, error) {
 		// Parse step line
 		stepValues, err := utils.ParseStringIntoIntArray(line, " ")
 		if err != nil {
-			return nil, nil, err
+			panic(err)
 		}
 		stepsMap[currentTransition] = append(stepsMap[currentTransition], stepValues)
 	}
 
-	return seeds, stepsMap, nil
+	return seeds, stepsMap
 }
 
-func parseSeedsLine(line string) ([]int, error) {
+func parseSeedsLine(line string) []int {
 	seedsString := strings.Split(line, ":")[1]
-	return utils.ParseStringIntoIntArray(seedsString, " ")
+	seedsInt, err := utils.ParseStringIntoIntArray(seedsString, " ")
+	if err != nil {
+		panic(err)
+	}
+	return seedsInt
 }

@@ -22,7 +22,7 @@ func cardPowerMapPartA() map[string]int {
 	}
 }
 
-func processPartAFile(fileScanner *bufio.Scanner) (int, error) {
+func processPartAFile(fileScanner *bufio.Scanner) int {
 	return processFile(fileScanner, parseLinePartA)
 }
 

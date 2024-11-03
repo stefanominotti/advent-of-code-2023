@@ -8,7 +8,7 @@ import (
 
 const starRegexPattern = `\*`
 
-func processPartBLine(prevLine string, line string, nextLine string) (int, error) {
+func processPartBLine(prevLine string, line string, nextLine string) int {
 	// Find the indexes of all '*' in the line
 	re := regexp.MustCompile(starRegexPattern)
 	matches := re.FindAllIndex([]byte(line), -1)
@@ -21,11 +21,7 @@ func processPartBLine(prevLine string, line string, nextLine string) (int, error
 	for _, numberIndexes := range matches {
 		var adjacentNumbers []int
 		for _, checkLine := range linesArray {
-			lineNumbers, err := getAdjacentNumbers(numberIndexes[0], checkLine)
-			if err != nil {
-				return 0, err
-			}
-
+			lineNumbers := getAdjacentNumbers(numberIndexes[0], checkLine)
 			adjacentNumbers = append(adjacentNumbers, lineNumbers...)
 		} 
 		if (len(adjacentNumbers) == 2) {
@@ -33,12 +29,12 @@ func processPartBLine(prevLine string, line string, nextLine string) (int, error
 		}
 	}
 
-	return result, nil
+	return result
 }
 
 // Given an index and a line returns all the numbers in the line
 // which are adjacent to the given index.
-func getAdjacentNumbers(idx int, line string) ([]int, error) {
+func getAdjacentNumbers(idx int, line string) []int {
 	re := utils.NumberRegex()
 	matches := re.FindAllIndex([]byte(line), -1)
 
@@ -47,11 +43,11 @@ func getAdjacentNumbers(idx int, line string) ([]int, error) {
 		if (idx >= match[0]-1 && idx < match[1]+1) {
 			number, err := strconv.Atoi(string(line[match[0]:match[1]]))
 			if err != nil {
-				return []int{}, err
+				panic(err)
 			}
 			numbers = append(numbers, number)
 		}
 	}
 
-	return numbers, nil
+	return numbers
 }

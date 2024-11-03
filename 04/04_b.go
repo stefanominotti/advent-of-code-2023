@@ -4,7 +4,7 @@ import (
 	"bufio"
 )
 
-func processPartBFile(fileScanner *bufio.Scanner) (int, error) {
+func processPartBFile(fileScanner *bufio.Scanner) int {
 	var scratchcardCounts []int
 	var currentScratchCard int
 	var result int
@@ -14,10 +14,7 @@ func processPartBFile(fileScanner *bufio.Scanner) (int, error) {
 
 		// Get winning numbers for current scratchcard
 		line := fileScanner.Text()
-		lineResult, err := getLineWinningNumbersCount(line)
-		if err != nil {
-			return 0, err
-		}
+		lineResult := getLineWinningNumbersCount(line)
 
 		// Increment the count of the next lineResult scratchcards
 		// by the number of the current scratchcard
@@ -32,7 +29,7 @@ func processPartBFile(fileScanner *bufio.Scanner) (int, error) {
 		currentScratchCard += 1
 	}
 
-	return result, nil
+	return result
 }
 
 // Increment the specified position of the scratchcards count array by

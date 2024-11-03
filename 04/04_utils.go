@@ -15,11 +15,8 @@ type Scratchcard struct {
 }
 
 // Parse a line and retrieve effective winning numbers
-func getLineWinningNumbersCount(line string) (int, error) {
-	scratchcard, err := createScratchcard(line)
-	if err != nil {
-		return 0, err
-	}
+func getLineWinningNumbersCount(line string) int {
+	scratchcard := createScratchcard(line)
 
 	// Retrieve effective winning numbers, i.e. numbers which are in both
 	// numbers and winning numbers lists
@@ -30,14 +27,14 @@ func getLineWinningNumbersCount(line string) (int, error) {
 		}
 	}
 
-	return winningNumbersCount, nil
+	return winningNumbersCount
 }
 
 const cardRegexPattern = `Card *(\d+):.*`
 
 // Build a Scratchcard object continaing the number of the scratchcard and 
 // the list of all numbers and winning numbers.
-func createScratchcard(line string) (Scratchcard, error) {
+func createScratchcard(line string) Scratchcard {
 	// Retrieve scratchcard number
 	re := regexp.MustCompile(cardRegexPattern)
 	cardNumberString := re.FindStringSubmatch(line)[1]
@@ -48,18 +45,18 @@ func createScratchcard(line string) (Scratchcard, error) {
 	// Convert the numbers string into numbers array
 	numbers, err := utils.ParseStringIntoIntArray(numbersStrings[0], " ")
 	if err != nil {
-		return Scratchcard{}, err
+		panic(err)
 	}
 
 	// Convert the winning numbers string into numbers array
 	winningNumbers, err := utils.ParseStringIntoIntArray(numbersStrings[1], " ")
 	if err != nil {
-		return Scratchcard{}, err
+		panic(err)
 	}
 
 	cardNumber, err := strconv.Atoi(cardNumberString)
 	if err != nil {
-		return Scratchcard{}, err
+		panic(err)
 	}
-	return Scratchcard{cardNumber, numbers, winningNumbers}, nil
+	return Scratchcard{cardNumber, numbers, winningNumbers}
 }

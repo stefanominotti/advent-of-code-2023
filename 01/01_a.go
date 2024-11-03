@@ -5,7 +5,7 @@ import (
 	"strconv"
 )
 
-func processPartALine(line string) (int, error) {
+func processPartALine(line string) int {
 	// Find all digits in the line
 	re := utils.DigitRegex()
 	matches := re.FindAllString(line, -1)
@@ -13,15 +13,15 @@ func processPartALine(line string) (int, error) {
 	// Get the first digit matched
 	firstNumber, err := strconv.Atoi(matches[0])
 	if err != nil {
-		return 0, err
+		panic(err)
 	}
 
 	// Get the last digit matched
 	lastNumber, err := strconv.Atoi(matches[len(matches)-1])
 	if err != nil {
-		return 0, err
+		panic(err)
 	}
 
 	// Concat the digits
-	return firstNumber*10 + lastNumber, nil
+	return firstNumber*10 + lastNumber
 }

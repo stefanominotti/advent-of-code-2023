@@ -5,7 +5,7 @@ import (
 	"slices"
 )
 
-func processPartBFile(fileScanner *bufio.Scanner) (int, error) {
+func processPartBFile(fileScanner *bufio.Scanner) int {
 	network := parseFile(fileScanner)
 
 	startingNodes := []string{}
@@ -38,7 +38,7 @@ func processPartBFile(fileScanner *bufio.Scanner) (int, error) {
 		cycles += minCyclesNeeded
 	}
 
-	return cycles*len(network.path), nil
+	return cycles*len(network.path)
 }
 
 // The function checks whether cycles is a multiplier of all 

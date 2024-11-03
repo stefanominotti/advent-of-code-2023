@@ -4,7 +4,7 @@ import (
 	"bufio"
 )
 
-func processPartAFile(fileScanner *bufio.Scanner) (int, error) {
+func processPartAFile(fileScanner *bufio.Scanner) int {
 	network := parseFile(fileScanner)
 
 	// Calculate the distance from AAA to ZZZ
@@ -26,6 +26,6 @@ func processPartAFile(fileScanner *bufio.Scanner) (int, error) {
 		cycles += 1
 	}
 
-	return cycles*len(network.path), nil
+	return cycles*len(network.path)
 }
 

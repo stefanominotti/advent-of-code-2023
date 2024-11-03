@@ -1,10 +1,7 @@
 package main
 
-func processPartALine(line string) (int, error) {
-	game, err := createGame(line)
-	if err != nil {
-		return 0, err
-	}
+func processPartALine(line string) int {
+	game := createGame(line)
 
 	cubes := map[string]int{
 		"red":   12,
@@ -16,11 +13,11 @@ func processPartALine(line string) (int, error) {
 	// is lower than the max number
 	for _, ball := range game.balls {
 		if cubes[ball.color] < ball.number {
-			return 0, nil
+			return 0
 		}
 	}
 
 	// In case all the extractions respect the condition,
 	// returns the game number
-	return game.number, nil
+	return game.number
 }

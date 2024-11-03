@@ -4,11 +4,8 @@ import (
 	"bufio"
 )
 
-func processPartAFile(fileScanner *bufio.Scanner) (int, error) {
-	seeds, steps, err := parseFile(fileScanner)
-	if err != nil {
-		return 0, err
-	}
+func processPartAFile(fileScanner *bufio.Scanner) int {
+	seeds, steps := parseFile(fileScanner)
 
 	// For each seed calculate the location and get the minimum
 	result := -1 
@@ -18,7 +15,7 @@ func processPartAFile(fileScanner *bufio.Scanner) (int, error) {
 			result = seedValue
 		}
 	}
-	return result, nil
+	return result
 }
 
 // Calculate the location from a seed by following the steps

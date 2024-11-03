@@ -1,11 +1,7 @@
 package main
 
-func processPartBLine(line string) (int, error) {
-	game, err := createGame(line)
-
-	if err != nil {
-		return 0, err
-	}
+func processPartBLine(line string) int {
+	game := createGame(line)
 
 	// For each ball color store the minimim number of balls
 	// with that color extracted in any extraction
@@ -22,5 +18,5 @@ func processPartBLine(line string) (int, error) {
 	}
 
 	// Returns the product of the minimums
-	return minColorNumbers["red"] * minColorNumbers["green"] * minColorNumbers["blue"], nil
+	return minColorNumbers["red"] * minColorNumbers["green"] * minColorNumbers["blue"]
 }

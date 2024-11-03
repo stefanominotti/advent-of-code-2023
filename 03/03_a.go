@@ -6,7 +6,7 @@ import (
 	"unicode"
 )
 
-func processPartALine(prevLine string, line string, nextLine string) (int, error) {
+func processPartALine(prevLine string, line string, nextLine string) int {
 	// Find the indexes of all numbers in the line
 	re := utils.NumberRegex()
 	matches := re.FindAllIndex([]byte(line), -1)
@@ -20,7 +20,7 @@ func processPartALine(prevLine string, line string, nextLine string) (int, error
 			if isThereAdjacentSymbol(numberIndexes[0], numberIndexes[1], checkLine) {
 				number, err := strconv.Atoi(string(line[numberIndexes[0]:numberIndexes[1]]))
 				if err != nil {
-					return 0, err
+					panic(err)
 				}
 	
 				result += number
@@ -29,7 +29,7 @@ func processPartALine(prevLine string, line string, nextLine string) (int, error
 		} 
 	}
 
-	return result, nil
+	return result
 }
 
 // Given a range of indexes (start inclusive, end exclusive) and a line

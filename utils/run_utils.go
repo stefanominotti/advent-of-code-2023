@@ -6,60 +6,47 @@ import (
 	"os"
 )
 
-func RunChallenge(processingFunctions ...func(fileScanner *bufio.Scanner) (int, error)) {
+func RunChallenge(processingFunctions ...func(fileScanner *bufio.Scanner) int) {
 	for idx, function := range processingFunctions {
-		var result int
-		var err error
-		result, err = processFile(function)
-
-		if err != nil {
-			fmt.Println(err)
-			return
-		}
+		result := processFile(function)
 		fmt.Printf("Part %s: %d\n", string('A'+idx), result)
 	}
 }
 
-func ProcessFileLineByLineFunction(processLineFunction func(line string) (int, error)) func(*bufio.Scanner) (int, error) {
-	return func(fileScanner *bufio.Scanner) (int, error) {
+func ProcessFileLineByLineFunction(processLineFunction func(line string) int) func(*bufio.Scanner) int {
+	return func(fileScanner *bufio.Scanner) int {
 		return processFileLineByLine(processLineFunction)
 	}
 }
 
-func processFile(processingFunction func(fileScanner *bufio.Scanner) (int, error)) (int, error) {
+func processFile(processingFunction func(fileScanner *bufio.Scanner) int) int {
 	filePath := "input.txt"
 	readFile, err := os.Open(filePath)
 
 	if err != nil {
-		return 0, err
+		panic(err)
 	}
 
 	fileScanner := bufio.NewScanner(readFile)
 	fileScanner.Split(bufio.ScanLines)
 
-	result, err := processingFunction(fileScanner)
-	if err != nil {
-		return 0, err
-	}
+	result := processingFunction(fileScanner)
 
 	readFile.Close()
 
-	return result, nil
+	return result
 }
 
-func processFileLineByLine(processingFunction func(line string) (int, error)) (int, error) {
-	lineByLineProcessing := func(fileScanner *bufio.Scanner) (int, error) {
+func processFileLineByLine(processingFunction func(line string) int) int {
+	lineByLineProcessing := func(fileScanner *bufio.Scanner) int {
 		result := 0
 		for fileScanner.Scan() {
 			line := fileScanner.Text()
-			lineResult, err := processingFunction(line)
-			if err != nil {
-				return 0, err
-			}
+			lineResult := processingFunction(line)
 			result += lineResult
 		}
 
-		return result, nil
+		return result
 	}
 	return processFile(lineByLineProcessing)
 }
