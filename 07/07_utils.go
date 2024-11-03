@@ -2,7 +2,6 @@ package main
 
 import (
 	"bufio"
-	"fmt"
 	"slices"
 	"strconv"
 	"strings"
@@ -16,6 +15,8 @@ type Hand struct {
 
 func processFile(fileScanner *bufio.Scanner, parseLine func(line string) Hand) (int, error) {
 	hands := parseFile(fileScanner, parseLine)
+
+	// Sort hands by strength
 	slices.SortFunc(hands, handsSortFunc)
 
 	result := 0
@@ -25,6 +26,10 @@ func processFile(fileScanner *bufio.Scanner, parseLine func(line string) Hand) (
 	return result, nil
 }
 
+// Given two hands returns -1 if a is stronger than b,
+// 1 if a is weaker than b, 0 if they have the same strength;
+// the check is done first on hand strength and in case of tie
+// comparing the card values
 func handsSortFunc(a Hand, b Hand) int {
 	if a.strength < b.strength {
 		return -1
@@ -44,8 +49,6 @@ func handsSortFunc(a Hand, b Hand) int {
 		}
 	}
 
-	fmt.Println("same power", a, b)
-
 	return 0
 }
 
@@ -61,6 +64,9 @@ func parseFile(fileScanner *bufio.Scanner, parseLine func(line string) Hand) []H
 	return hands
 }
 
+// Create an Hand object from a line considering the card power
+// from the cardPowerMap parameter and calculating the strength
+// of the hand using calculateHandStrength function
 func parseLine(line string, cardPowerMap map[string]int, calculateHandStrength func(handCardsCount []int) int) Hand {
 	splitLine := strings.Split(line, " ")
 
@@ -81,6 +87,10 @@ func parseLine(line string, cardPowerMap map[string]int, calculateHandStrength f
 	return Hand{cards, calculateHandStrength(cardsCount[:]), bet}
 }
 
+// Calculate the strength of an hand by checking the number of copies
+// of the card with the most copies (eventually plus the jollies, for part B);
+// in case of 3 and 2 copies check also the second card with the most copies
+// for full house or two pair
 func calculateHandStrength(handCardsCount []int, jolliesCount int) int {
 	slices.Sort(handCardsCount)
 	slices.Reverse(handCardsCount)

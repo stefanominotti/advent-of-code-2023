@@ -30,6 +30,8 @@ func parseLinePartB(line string) Hand {
 	return parseLine(line, cardPowerMapPartB(), calculateHandStrengthPartB)
 }
 
+// Call the calculateHandStrength function passing the
+// number of J (jollies)
 func calculateHandStrengthPartB(handCardsCount []int) int {
 	jCount := handCardsCount[0]
 	handCardsCount = handCardsCount[1:]
